@@ -110,8 +110,6 @@ try:
             datapredict[var] = datapredict[var].map(lambda e: 'Terindikasi TKM' if e == 1 else 'Tidak Terindikasi TKM')
         st.markdown("## Hasil Prediksi Model Machine Learning")
 
-
-
         if noorek == "":
             st.dataframe(datapredict)
             col1, col2 = st.columns(2)

@@ -1,11 +1,4 @@
 import streamlit as st
-import time
-import numpy as np
-import pandas as pd
-from streamlit_extras.app_logo import add_logo
-from streamlit_extras.switch_page_button import switch_page
-from urllib.error import URLError
-import streamlit as st
 import pandas as pd
 import time
 import base64
@@ -14,101 +7,8 @@ import gmaps
 import folium
 from streamlit_folium import folium_static
 
-st.set_page_config(page_title="Define Entities", page_icon="📃", layout="wide", 
-    initial_sidebar_state="expanded")
-st.markdown("# Define Entities")
-st.markdown("Import Data (.csv)")
-add_logo("logo.png", height=100)
-# st.write(
-#     """This demo illustrates a combination of plotting and animation with
-# Streamlit. We're generating a bunch of random numbers in a loop for around
-# 5 seconds. Enjoy!"""
-# )
-uploaded_file = st.file_uploader("Choose a Transaction Data")
-uploaded_data = st.file_uploader("Choose a Company Data")
-
-@st.cache_data
-def from_data_file(file):
-    dataframe = pd.read_csv(file)
-    return dataframe
-
-
-if uploaded_file is not None:
-    try:
-        dataframe = from_data_file(uploaded_file)
-        dataframe = dataframe.drop(['isfraud', 'typeoffraud'], axis=1)
-        dataframe.columns = ['Jenis Transaksi', 'No.Rek.Pengirim', 'No.Rek.Penerima', 'Jumlah Transaksi', 'Tanggal Transaksi']
-        dataframe = dataframe.astype({'No.Rek.Pengirim': 'str', 'No.Rek.Penerima': 'str'})
-        st.session_state['df1'] = dataframe
-        st.markdown("#### Financial Transaction Data")
-        st.write("Show 10 from {} data".format(len(dataframe.index)))
-        st.dataframe(dataframe)        
-    except URLError as e:
-        st.error(
-            """
-            **This demo requires internet access.**
-            Connection error: %s
-        """
-            % e.reason
-            )
-else :
-    try:
-        dataframecache = st.session_state['df']
-        st.markdown("#### Financial Transaction Data")
-        st.write("Menampilkan {} data".format(len(dataframecache.index)))
-        st.dataframe(dataframecache)
-    except KeyError as e:
-        st.error(
-           """
-            **Please define your data.**
-            
-        """
-            )
-
-if uploaded_data is not None:
-    try:
-        dataframe1 = from_data_file(uploaded_data)
-        dataframe1 = dataframe1.drop(["rt_perseroan","rw_perseroan","kode_pos_perseroan","provinsi_id_perseroan","kabupaten_id_perseroan","kecamatan_id_perseroan","kelurahan_id_perseroan"], axis=1)
-        dataframe1.columns = ["nama_perseroan","alamat_perseroan","provinsi_nama_perseroan","kabupaten_nama_perseroan","kecamatan_nama_perseroan","kelurahan"]        
-        st.session_state['df2'] = dataframe1
-        st.markdown("#### Company Data")
-        st.write("Show 10 from {} data".format(len(dataframe1.index)))
-        st.dataframe(dataframe1)
-        st.write("Press “Analyze” button to analying data.")
-
-        if st.button('Analyze'):
-            st.write('Data is being analyzed')
-            switch_page("Analyze_Transaction")
-        else:
-            st.write('')
-    except URLError as e:
-        st.error(
-            """
-            **This demo requires internet access.**
-            Connection error: %s
-        """
-            % e.reason
-            )
-else :
-    try:
-        dataframecache1 = st.session_state['df1']
-        st.markdown("#### Company Data")
-        st.write("Menampilkan {} data".format(len(dataframecache1.index)))
-        st.dataframe(dataframecache1)
-        st.write("Press “Analyze” button to analying data.")
-
-        if st.button('Analyze'):
-            st.write('Data is being analyzed')
-            switch_page("Analyze_Transaction")
-        else:
-            st.write('')
-    except KeyError as e:
-        st.error(
-           """
-            **Please define your data.**
-            
-        """
-            )
+st.title("Geocoding Address")
+st.markdown("Uppload a CSV File with address columns (Street name & number, Postcode, City)")
 
 def create_address_col(df):
     st.sidebar.title("Select Address columns")

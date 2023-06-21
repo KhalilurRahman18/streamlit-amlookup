@@ -3,3 +3,5 @@ networkx
 xgboost
 pandas
 pyvis
+geopy
+plotly_express
